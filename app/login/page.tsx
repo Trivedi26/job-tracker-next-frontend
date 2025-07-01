@@ -11,7 +11,7 @@ const { Content } = Layout;
 export default function LoginPage() {
   const onFinish = async (values: any) => {
     try {
-      const res = await axios.post('/auth/login', values); // 👈 Login API
+      const res = await axios.post('/api/job-tracker/auth/login', values); // 👈 Login API
       const { token } = res.data;
 
       // ✅ Store token in localStorage

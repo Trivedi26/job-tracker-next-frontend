@@ -17,7 +17,7 @@ export default function RegisterPage() {
     const onFinish = async (values: any) => {
         setLoading(true); // 🌀 Start spinner
         try {
-            const res = await axios.post('/auth/register', values);
+            const res = await axios.post('/api/job-tracker/auth/register', values);
             console.log('✅ Registered:', res.data);
             message.success('Registration successful! Redirecting to login...');
             setTimeout(() => {
