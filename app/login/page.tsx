@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import { Form, Input, Button, Typography, Layout, message } from 'antd';
