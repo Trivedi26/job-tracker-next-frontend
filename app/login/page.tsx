@@ -1,27 +1,42 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-'use client';
+"use client";
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Form, Input, Button, Typography, Layout, message } from 'antd';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import Link from 'next/link';
-import axios from '@/utils/axiosInstance'; // ✅ Import your Axios instance
+import axios from '@/utils/axiosInstance';
+import { useAuthStore } from '@/store/useAuthStore';
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 const { Title } = Typography;
 const { Content } = Layout;
 
 export default function LoginPage() {
+  const login = useAuthStore((state) => state.login);
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  const token = useAuthStore((state) => state.token);
+  const router = useRouter();
+
+  useEffect(() => {
+    console.log("📦 Zustand - Token:", token);
+    console.log("✅ Zustand - isAuthenticated:", isAuthenticated);
+  }, [token, isAuthenticated]);
+
   const onFinish = async (values: any) => {
     try {
-      const res = await axios.post('/api/job-tracker/auth/login', values); // 👈 Login API
+      const res = await axios.post('/api/job-tracker/auth/login', values);
       const { token } = res.data;
 
-      // ✅ Store token in localStorage
-      localStorage.setItem('token', token);
+      console.log("📥 Received token from API:", token);
 
+      login(token); // Save in Zustand + localStorage
+
+      console.log("✅ Token stored in Zustand + localStorage");
       message.success('Login successful!');
-      window.location.href = '/dashboard'; // 👈 Redirect after login
+      router.push("/dashboard");
     } catch (error: any) {
-      console.error('Login failed:', error.response?.data);
+      console.error("❌ Login failed:", error.response?.data);
       message.error(error.response?.data?.message || 'Login failed');
     }
   };
