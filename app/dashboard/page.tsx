@@ -1,16 +1,26 @@
 'use client';
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { Typography, Layout, Button } from 'antd';
 import { useRouter } from 'next/navigation';
+import { useAuthStore } from '@/store/useAuthStore';
 
 const { Title } = Typography;
 const { Content } = Layout;
 
 export default function DashboardPage() {
     const router = useRouter();
+    const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+    const logout = useAuthStore((state) => state.logout); // ✅ Logout from store
+
+    // 🔒 Redirect to login if not authenticated
+    if (!isAuthenticated) {
+        router.push('/login');
+        return null;
+    }
 
     const handleLogout = () => {
-        // TODO: Clear auth token or session here if needed
+        logout(); // ✅ Clear token from Zustand + localStorage
         router.push('/login');
     };
 
