@@ -1,46 +1,44 @@
 'use client';
-/* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { Typography, Layout, Button } from 'antd';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/store/useAuthStore';
-
-const { Title } = Typography;
-const { Content } = Layout;
+import { Spin } from 'antd';
 
 export default function DashboardPage() {
     const router = useRouter();
     const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
-    const logout = useAuthStore((state) => state.logout); // ✅ Logout from store
+    const role = useAuthStore((state) => state.role);
+    const [isChecking, setIsChecking] = useState(true);
 
-    // 🔒 Redirect to login if not authenticated
-    if (!isAuthenticated) {
-        router.push('/login');
-        return null;
+    useEffect(() => {
+        // Wait until hydration completes
+        if (typeof window !== 'undefined') {
+            if (!isAuthenticated) {
+                router.push('/login');
+            } else if (role === 'seeker') {
+                router.push('/dashboard/seeker');
+            } else if (role === 'employer') {
+                router.push('/dashboard/employer');
+            }
+            setIsChecking(false);
+        }
+    }, [isAuthenticated, role, router]);
+
+    if (isChecking) {
+        return (
+            <div
+                style={{
+                    height: '100vh',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                }}
+            >
+                <Spin tip="Redirecting..." size="large" />
+            </div>
+        );
     }
 
-    const handleLogout = () => {
-        logout(); // ✅ Clear token from Zustand + localStorage
-        router.push('/login');
-    };
-
-    return (
-        <Layout style={{ minHeight: '100vh', backgroundColor: '#f0f2f5' }}>
-            <Content style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                <div style={{ padding: 24, background: 'white', borderRadius: 8, textAlign: 'center' }}>
-                    <Title level={2}>Welcome to Dashboard 🎯</Title>
-                    <p>You are now logged in.</p>
-
-                    <Button
-                        type="primary"
-                        danger
-                        onClick={handleLogout}
-                        style={{ marginTop: 20 }}
-                    >
-                        Logout
-                    </Button>
-                </div>
-            </Content>
-        </Layout>
-    );
+    return null;
 }

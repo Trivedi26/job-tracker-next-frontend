@@ -1,10 +1,10 @@
-// src/store/useAuthStore.ts
 import { create } from "zustand";
 
 interface AuthState {
     token: string | null;
     isAuthenticated: boolean;
-    login: (token: string) => void;
+    role: string | null; // ✅ Add role
+    login: (token: string, role: string) => void;
     logout: () => void;
     initAuth: () => void;
 }
@@ -12,21 +12,25 @@ interface AuthState {
 export const useAuthStore = create<AuthState>((set) => ({
     token: null,
     isAuthenticated: false,
+    role: null,
 
-    login: (token) => {
+    login: (token: string, role: string) => {
         localStorage.setItem("token", token);
-        set({ token, isAuthenticated: true });
+        localStorage.setItem("role", role);
+        set({ token, isAuthenticated: true, role });
     },
 
     logout: () => {
         localStorage.removeItem("token");
-        set({ token: null, isAuthenticated: false });
+        localStorage.removeItem("role");
+        set({ token: null, isAuthenticated: false, role: null });
     },
 
     initAuth: () => {
         const token = localStorage.getItem("token");
-        if (token) {
-            set({ token, isAuthenticated: true });
+        const role = localStorage.getItem("role");
+        if (token && role) {
+            set({ token, isAuthenticated: true, role });
         }
     },
 }));

@@ -26,15 +26,18 @@ export default function LoginPage() {
   const onFinish = async (values: any) => {
     try {
       const res = await axios.post('/api/job-tracker/auth/login', values);
-      const { token } = res.data;
+      const { token, user } = res.data;
 
-      console.log("📥 Received token from API:", token);
+      console.log("📥 Received token:", token);
+      console.log("📥 Received role:", user.role);
 
-      login(token); // Save in Zustand + localStorage
+      // ✅ Save token and role
+      login(token, user.role);
 
-      console.log("✅ Token stored in Zustand + localStorage");
       message.success('Login successful!');
-      router.push("/dashboard");
+
+      // ✅ Redirect dynamically to /dashboard/seeker or /dashboard/employer
+      router.push(`/dashboard/${user.role}`);
     } catch (error: any) {
       console.error("❌ Login failed:", error.response?.data);
       message.error(error.response?.data?.message || 'Login failed');
@@ -45,9 +48,7 @@ export default function LoginPage() {
     <Layout style={{ minHeight: '100vh', backgroundColor: '#f9f9f9' }}>
       <Content style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
         <div style={{ width: 400, padding: 24, background: 'white', borderRadius: 8 }}>
-          <Title level={3} style={{ textAlign: 'center' }}>
-            Login
-          </Title>
+          <Title level={3} style={{ textAlign: 'center' }}>Login</Title>
 
           <Form layout="vertical" onFinish={onFinish}>
             <Form.Item
