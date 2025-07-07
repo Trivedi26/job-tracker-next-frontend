@@ -25,18 +25,16 @@ export default function LoginPage() {
 
   const onFinish = async (values: any) => {
     try {
-      const res = await axios.post('/api/job-tracker/auth/login', values);
+      const res = await axios.post('/auth/login', values);
       const { token, user } = res.data;
 
       console.log("📥 Received token:", token);
       console.log("📥 Received role:", user.role);
 
-      // ✅ Save token and role
-      login(token, user.role);
+      // ✅ FIXED: Pass all required arguments
+      login(token, user.role, user);
 
       message.success('Login successful!');
-
-      // ✅ Redirect dynamically to /dashboard/seeker or /dashboard/employer
       router.push(`/dashboard/${user.role}`);
     } catch (error: any) {
       console.error("❌ Login failed:", error.response?.data);
