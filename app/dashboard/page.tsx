@@ -1,44 +1,29 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/store/useAuthStore';
-import { Spin } from 'antd';
+import SeekerDashboardLayout from '@/components/SeekerDashboardLayout';
 
-export default function DashboardPage() {
+export default function SeekerDashboard() {
+    const { role, isAuthenticated } = useAuthStore((state) => ({
+        role: state.role,
+        isAuthenticated: state.isAuthenticated,
+    }));
     const router = useRouter();
-    const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
-    const role = useAuthStore((state) => state.role);
-    const [isChecking, setIsChecking] = useState(true);
 
     useEffect(() => {
-        // Wait until hydration completes
-        if (typeof window !== 'undefined') {
-            if (!isAuthenticated) {
-                router.push('/login');
-            } else if (role === 'seeker') {
-                router.push('/dashboard/seeker');
-            } else if (role === 'employer') {
-                router.push('/dashboard/employer');
-            }
-            setIsChecking(false);
+        if (!isAuthenticated) {
+            router.push('/login');
+        } else if (role !== 'seeker') {
+            router.push('/dashboard/employer'); // or show 403 page
         }
     }, [isAuthenticated, role, router]);
 
-    if (isChecking) {
-        return (
-            <div
-                style={{
-                    height: '100vh',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                }}
-            >
-                <Spin tip="Redirecting..." size="large" />
-            </div>
-        );
-    }
-
-    return null;
+    return (
+        <SeekerDashboardLayout>
+            <h1>🎯 Seeker Dashboard</h1>
+            <p>Welcome, find jobs and apply easily!</p>
+        </SeekerDashboardLayout>
+    );
 }

@@ -2,7 +2,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Form, Input, Button, Typography, Layout, message } from 'antd';
+import { Form, Input, Button, Typography, Layout, message, Radio } from 'antd';
 import { LockOutlined, UserOutlined, MailOutlined } from '@ant-design/icons';
 import Link from 'next/link';
 import axios from '@/utils/axiosInstance';
@@ -18,7 +18,7 @@ export default function RegisterPage() {
     const onFinish = async (values: any) => {
         setLoading(true); // 🌀 Start spinner
         try {
-            const res = await axios.post('/api/job-tracker/auth/register', values);
+            const res = await axios.post('/auth/register', values);
             console.log('✅ Registered:', res.data);
             message.success('Registration successful! Redirecting to login...');
             setTimeout(() => {
@@ -61,6 +61,17 @@ export default function RegisterPage() {
                             rules={[{ required: true, message: 'Please input your password!' }]}
                         >
                             <Input.Password prefix={<LockOutlined />} placeholder="Enter your password" />
+                        </Form.Item>
+
+                        <Form.Item
+                            label="I am a"
+                            name="role"
+                            rules={[{ required: true, message: 'Please select a role' }]}
+                        >
+                            <Radio.Group>
+                                <Radio.Button value="seeker">Job Seeker</Radio.Button>
+                                <Radio.Button value="employer">Employer</Radio.Button>
+                            </Radio.Group>
                         </Form.Item>
 
                         <Form.Item>

@@ -1,6 +1,6 @@
 'use client';
 
-import { Layout, Menu, Avatar } from 'antd';
+import { Layout, Menu, Avatar, Typography } from 'antd';
 import { useRouter } from 'next/navigation';
 import {
     UserOutlined,
@@ -11,10 +11,12 @@ import {
 import { useAuthStore } from '@/store/useAuthStore';
 
 const { Sider, Content } = Layout;
+const { Title, Text } = Typography;
 
 const SeekerDashboardLayout = ({ children }: { children: React.ReactNode }) => {
     const router = useRouter();
     const logout = useAuthStore((state) => state.logout);
+    const user = useAuthStore((state) => state.user);
 
     const handleMenuClick = ({ key }: { key: string }) => {
         if (key === 'logout') {
@@ -30,12 +32,16 @@ const SeekerDashboardLayout = ({ children }: { children: React.ReactNode }) => {
             <Sider width={250} style={{ background: '#fff', padding: '20px' }}>
                 <div style={{ textAlign: 'center', marginBottom: 20 }}>
                     <Avatar size={80} icon={<UserOutlined />} />
-                    <h3>Seeker Name</h3>
-                    <p>seeker@example.com</p>
+                    <Title level={5} style={{ marginTop: 12, marginBottom: 0 }}>
+                        {user?.name || 'Seeker Name'}
+                    </Title>
+                    <Text type="secondary">{user?.email || 'seeker@example.com'}</Text>
                 </div>
+
                 <Menu
                     onClick={handleMenuClick}
                     items={[
+                        { key: 'profile', icon: <UserOutlined />, label: 'Profile' },
                         { key: 'resume', icon: <FileTextOutlined />, label: 'Resume Builder' },
                         { key: 'courses', icon: <BookOutlined />, label: 'Courses' },
                         { key: 'logout', icon: <LogoutOutlined />, label: 'Logout' },
@@ -49,4 +55,4 @@ const SeekerDashboardLayout = ({ children }: { children: React.ReactNode }) => {
     );
 };
 
-export default SeekerDashboardLayout; // ✅ Must be present
+export default SeekerDashboardLayout;
