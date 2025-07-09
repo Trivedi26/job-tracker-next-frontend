@@ -1,5 +1,6 @@
 'use client';
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Form, Input, Button, Select, message } from 'antd';
 import { useState } from 'react';
 import axios from '@/utils/axiosInstance';

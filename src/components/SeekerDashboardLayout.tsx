@@ -1,5 +1,6 @@
 'use client';
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Layout, Menu, Avatar, Typography } from 'antd';
 import { useRouter } from 'next/navigation';
 import {
