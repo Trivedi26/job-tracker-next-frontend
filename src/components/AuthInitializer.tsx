@@ -1,15 +1,14 @@
-"use client";
-/* eslint-disable @typescript-eslint/no-explicit-any */
+'use client';
 
-import { useEffect } from "react";
-import { useAuthStore } from "@/store/useAuthStore";
+import { useEffect } from 'react';
+import { useAuthStore } from '@/store/useAuthStore';
 
 export default function AuthInitializer() {
-    const initAuth = useAuthStore((state: { initAuth: any; }) => state.initAuth);
+  const initAuth = useAuthStore((state) => state.initAuth);
 
-    useEffect(() => {
-        initAuth();
-    }, []);
+  useEffect(() => {
+    initAuth();
+  }, [initAuth]); // ✅ Add dependency to avoid warning
 
-    return null; // no UI
+  return null; // ✅ No UI rendered
 }

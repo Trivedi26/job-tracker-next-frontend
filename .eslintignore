@@ -1,0 +1,6 @@
+# Don't lint these folders
+node_modules/
+.next/
+out/
+dist/
+public/
