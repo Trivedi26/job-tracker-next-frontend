@@ -3,7 +3,6 @@
 import { Form, Input, Button, Select, message } from 'antd';
 import { useState } from 'react';
 import axios from '@/utils/axiosInstance';
-import { useRouter } from 'next/navigation';
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -19,14 +18,13 @@ interface JobFormValues {
 export default function JobForm() {
   const [form] = Form.useForm<JobFormValues>();
   const [loading, setLoading] = useState(false);
-  const router = useRouter();
 
   const onFinish = async (values: JobFormValues) => {
     try {
       setLoading(true);
       await axios.post('/jobs', values);
       message.success('Job posted successfully!');
-      router.push('/dashboard/employer/my-jobs'); // ✅ Optional redirect after post
+      // router.push('/dashboard/employer/my-jobs'); // ✅ Optional redirect after post
     } catch (error) {
       console.error('❌ Job post error:', error);
       message.error('Failed to post job');
