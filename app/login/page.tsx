@@ -1,4 +1,5 @@
 'use client';
+
 import { Form, Input, Button, Typography, Layout, message } from 'antd';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import Link from 'next/link';
@@ -6,6 +7,7 @@ import axios from '@/utils/axiosInstance';
 import { useAuthStore } from '@/store/useAuthStore';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
+import type { AxiosError } from 'axios'; // ✅ Proper error type
 
 const { Title } = Typography;
 const { Content } = Layout;
@@ -31,20 +33,18 @@ export default function LoginPage() {
       const res = await axios.post('/auth/login', values);
       const { token, user } = res.data;
 
-      console.log('📥 Received token:', token);
-      console.log('📥 Received role:', user.role);
-
       login(token, user.role, user);
+      message.success('✅ Login successful!', 2); // ✅ Success toast
 
-      message.success('Login successful!');
-      router.push(`/dashboard/${user.role}`);
+      setTimeout(() => {
+        router.push(`/dashboard/${user.role}`);
+      }, 500);
     } catch (error) {
-      if (error instanceof Error) {
-        message.error(error.message);
-      } else {
-        console.error('❌ Login failed:', error);
-        message.error('Login failed. Please try again.');
-      }
+      const err = error as AxiosError<{ message: string }>; // ✅ Typed error
+      console.error('❌ Login failed:', err);
+
+      const errorMessage = err.response?.data?.message || 'Login failed. Please try again.';
+      message.error(`❌ ${errorMessage}`, 2); // ✅ Error toast
     }
   };
 

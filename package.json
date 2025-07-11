@@ -14,11 +14,13 @@
     "antd": "^5.26.2",
     "axios": "^1.10.0",
     "next": "15.3.4",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "zustand": "^5.0.6"
   },
   "devDependencies": {
+    "@commitlint/cli": "^19.3.0",
+    "@commitlint/config-conventional": "^19.3.0",
     "@eslint/eslintrc": "^3.0.0",
     "@tailwindcss/postcss": "^4.0.0",
     "@types/node": "^20.0.0",
@@ -32,9 +34,7 @@
     "lint-staged": "^16.1.2",
     "prettier": "^3.6.2",
     "tailwindcss": "^4.0.0",
-    "typescript": "^5.0.0",
-    "@commitlint/cli": "^19.3.0",
-    "@commitlint/config-conventional": "^19.3.0"
+    "typescript": "^5.0.0"
   },
   "lint-staged": {
     "*.{js,ts,tsx}": "eslint --fix",
