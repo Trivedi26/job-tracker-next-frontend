@@ -13,6 +13,7 @@
   "dependencies": {
     "antd": "^5.26.2",
     "axios": "^1.10.0",
+    "framer-motion": "^12.23.3",
     "next": "15.3.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
